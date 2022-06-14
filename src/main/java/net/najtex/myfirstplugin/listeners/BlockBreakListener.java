@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.listeners;
 
+import net.najtex.myfirstplugin.MyFirstPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -19,9 +20,12 @@ public class BlockBreakListener implements Listener {
 
         Location location = event.getBlock().getLocation();
 
-        if (event.getBlock().getType() == Material.COBBLESTONE) {
+        String itemName = MyFirstPlugin.config.getString("replace-item");
+        String itemDrop = MyFirstPlugin.config.getString("drop-item");
+
+        if (event.getBlock().getType() == Material.valueOf(itemName)) {
             // Drop an item
-            event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.BEEF, 1));
+            event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), new ItemStack(Material.valueOf(itemDrop), MyFirstPlugin.config.getInt("drop-amount")));
         } else {
             event.setCancelled(true);
         }

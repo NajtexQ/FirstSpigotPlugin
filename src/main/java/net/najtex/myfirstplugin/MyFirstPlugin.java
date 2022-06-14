@@ -2,6 +2,7 @@ package net.najtex.myfirstplugin;
 
 import net.najtex.myfirstplugin.listeners.BlockBreakListener;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,10 +10,19 @@ import static org.bukkit.Bukkit.broadcastMessage;
 
 public final class MyFirstPlugin extends JavaPlugin {
 
+    public static FileConfiguration config;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
-        System.out.println("My first plugin has been enabled!");
+        getLogger().info("MyFirstPlugin is now enabled!");
+
+        config = getConfig();
+
+        config.options().copyDefaults(false);
+        saveDefaultConfig();
+
+        getLogger().info("Config loaded!");
 
         PluginManager pluginManager = getServer().getPluginManager();
 
@@ -33,6 +43,6 @@ public final class MyFirstPlugin extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
 
-        System.out.println("My first plugin has been disabled!");
+        getLogger().info("MyFirstPlugin is now enabled!");
     }
 }
