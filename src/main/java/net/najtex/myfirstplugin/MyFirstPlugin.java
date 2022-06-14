@@ -5,6 +5,8 @@ import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static org.bukkit.Bukkit.broadcastMessage;
+
 public final class MyFirstPlugin extends JavaPlugin {
 
     @Override
@@ -16,6 +18,14 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
+
+        // Make an interval for every 5mins to broadcast "Hello world!"
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                broadcastMessage("Hello world!");
+            }
+        }, 0L, 6000L);
 
     }
 

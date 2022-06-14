@@ -14,9 +14,6 @@ import static org.bukkit.Bukkit.broadcastMessage;
 
 public class BlockBreakListener implements Listener {
 
-    // Make a list of locations to store the locations of the blocks that are broken
-    public static ArrayList<Location> blockLocations = new ArrayList<Location>();
-
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
 
