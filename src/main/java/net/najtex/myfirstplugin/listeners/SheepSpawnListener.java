@@ -1,7 +1,8 @@
-package net.najtex.myfirstplugin;
+package net.najtex.myfirstplugin.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

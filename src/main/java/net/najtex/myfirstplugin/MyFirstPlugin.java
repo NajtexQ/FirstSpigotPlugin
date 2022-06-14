@@ -1,5 +1,8 @@
 package net.najtex.myfirstplugin;
 
+import net.najtex.myfirstplugin.listeners.BlockBreakListener;
+import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MyFirstPlugin extends JavaPlugin {
@@ -9,7 +12,10 @@ public final class MyFirstPlugin extends JavaPlugin {
         // Plugin startup logic
         System.out.println("My first plugin has been enabled!");
 
-        getServer().getPluginManager().registerEvents(new SheepSpawnListener(), this);
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new SheepSpawnListener(), this);
+        pluginManager.registerEvents(new BlockBreakListener(), this);
 
     }
 
