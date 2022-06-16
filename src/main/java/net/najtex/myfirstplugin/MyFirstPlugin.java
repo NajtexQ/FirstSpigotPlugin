@@ -1,16 +1,20 @@
 package net.najtex.myfirstplugin;
 
 import net.najtex.myfirstplugin.listeners.BlockBreakListener;
+import net.najtex.myfirstplugin.listeners.PlayerMove;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 import static org.bukkit.Bukkit.broadcastMessage;
 
 public final class MyFirstPlugin extends JavaPlugin {
 
     public static FileConfiguration config;
+    public static SocketConnection socketConnection;
 
     @Override
     public void onEnable() {
@@ -24,20 +28,29 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         getLogger().info("Config loaded!");
 
-        SocketConnection socketConnection = new SocketConnection();
+        socketConnection = new SocketConnection();
+
+        getLogger().info("SocketConnection loaded!");
+
         try {
+
+            getLogger().info("Connecting to server...");
             socketConnection.startConnection("localhost", 5000);
-            String resp = socketConnection.sendMessage("Hello World!");
-            getLogger().info(resp);
-            socketConnection.stopConnection();
+            getLogger().info("Connected to server!");
+
         } catch (Exception e) {
             getLogger().info("Error connecting to server!");
         }
 
         PluginManager pluginManager = getServer().getPluginManager();
 
+        getLogger().info("Registering listeners!");
+
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
+        pluginManager.registerEvents(new PlayerMove(), this);
+
+        getLogger().info("Listeners registered!");
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> broadcastMessage("Hello world!"), 0L, 6000L);
 
@@ -48,5 +61,10 @@ public final class MyFirstPlugin extends JavaPlugin {
         // Plugin shutdown logic
 
         getLogger().info("MyFirstPlugin is now disabled!");
+        try {
+            socketConnection.stopConnection();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
