@@ -24,18 +24,22 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         getLogger().info("Config loaded!");
 
+        SocketConnection socketConnection = new SocketConnection();
+        try {
+            socketConnection.startConnection("localhost", 5000);
+            String resp = socketConnection.sendMessage("Hello World!");
+            getLogger().info(resp);
+            socketConnection.stopConnection();
+        } catch (Exception e) {
+            getLogger().info("Error connecting to server!");
+        }
+
         PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
 
-        // Make an interval for every 5mins to broadcast "Hello world!"
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                broadcastMessage("Hello world!");
-            }
-        }, 0L, 6000L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> broadcastMessage("Hello world!"), 0L, 6000L);
 
     }
 
@@ -43,6 +47,6 @@ public final class MyFirstPlugin extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
 
-        getLogger().info("MyFirstPlugin is now enabled!");
+        getLogger().info("MyFirstPlugin is now disabled!");
     }
 }

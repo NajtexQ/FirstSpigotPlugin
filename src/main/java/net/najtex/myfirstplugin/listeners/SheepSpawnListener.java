@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.listeners;
 
+import net.najtex.myfirstplugin.MyFirstPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,7 +21,9 @@ public class SheepSpawnListener implements Listener {
         if (event.getEntityType() == EntityType.SHEEP) {
             event.setCancelled(true);
 
-            location.getWorld().setType(location, Material.COBBLESTONE);
+            String itemName = MyFirstPlugin.config.getString("replace-item");
+
+            location.getWorld().setType(location, Material.getMaterial(itemName));
 
             broadcastMessage("A sheep has been spawned!");
         }
