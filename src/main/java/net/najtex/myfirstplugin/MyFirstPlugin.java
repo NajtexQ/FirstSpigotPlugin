@@ -1,5 +1,7 @@
 package net.najtex.myfirstplugin;
 
+import net.najtex.myfirstplugin.commands.Heal;
+import net.najtex.myfirstplugin.commands.HealthStats;
 import net.najtex.myfirstplugin.listeners.BlockBreakListener;
 import net.najtex.myfirstplugin.listeners.PlayerMove;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
@@ -51,6 +53,9 @@ public final class MyFirstPlugin extends JavaPlugin {
         pluginManager.registerEvents(new PlayerMove(), this);
 
         getLogger().info("Listeners registered!");
+
+        getCommand("heal").setExecutor(new Heal());
+        getCommand("healthstats").setExecutor(new HealthStats());
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, () ->
         {

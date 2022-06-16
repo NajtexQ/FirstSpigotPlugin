@@ -4,3 +4,9 @@ main: net.najtex.myfirstplugin.MyFirstPlugin
 api-version: 1.19
 authors: [ Najtex ]
 description: My first plugin for spigot
+
+commands:
+  heal:
+    description: Heal to full health
+  healthstats:
+    description: Display your health
