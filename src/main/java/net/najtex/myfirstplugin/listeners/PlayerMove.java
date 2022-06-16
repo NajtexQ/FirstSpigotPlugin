@@ -31,7 +31,7 @@ public class PlayerMove implements Listener {
             // Send coordinates to server
             try {
                 getLogger().info("Sending coordinates to server...");
-                MyFirstPlugin.socketConnection.sendMessage(x + "," + y + "," + z);
+                MyFirstPlugin.socketConnection.sendMessage("x=" + x + " &y=" + y + " &z=" + z);
             } catch (IOException e) {
                 getLogger().info("Error sending coordinates to server!");
             }

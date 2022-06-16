@@ -48,6 +48,7 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
+        pluginManager.registerEvents(new PlayerMove(), this);
 
         getLogger().info("Listeners registered!");
 
@@ -59,7 +60,7 @@ public final class MyFirstPlugin extends JavaPlugin {
             } catch (IOException e) {
                 getLogger().info("Error sending message to server!");
             }
-        }, 0L, 20L);
+        }, 0L, 1200L);
 
     }
 
