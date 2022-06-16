@@ -48,11 +48,18 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
-        pluginManager.registerEvents(new PlayerMove(), this);
 
         getLogger().info("Listeners registered!");
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> broadcastMessage("Hello world!"), 0L, 6000L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, () ->
+        {
+            try {
+                socketConnection.sendMessage("Ping!");
+                getLogger().info("Server responded!");
+            } catch (IOException e) {
+                getLogger().info("Error sending message to server!");
+            }
+        }, 0L, 20L);
 
     }
 
