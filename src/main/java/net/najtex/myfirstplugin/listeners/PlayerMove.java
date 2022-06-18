@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.SocketException;
 
@@ -19,7 +20,7 @@ public class PlayerMove implements Listener {
 
         Player player = event.getPlayer();
 
-        player.sendMessage("You have moved!" + player.getName());
+        //player.sendMessage("You have moved!" + player.getName());
 
         if (player.getName().equals("Najtex")) {
 
@@ -29,12 +30,12 @@ public class PlayerMove implements Listener {
             double z = event.getTo().getZ();
 
             // Send coordinates to server
-            try {
-                getLogger().info("Sending coordinates to server...");
-                MyFirstPlugin.socketConnection.sendMessage("x=" + x + " &y=" + y + " &z=" + z);
-            } catch (IOException e) {
-                getLogger().info("Error sending coordinates to server!");
-            }
+            //try {
+            //    getLogger().info("Sending coordinates to server...");
+            //    MyFirstPlugin.socketConnection.sendMessage("x=" + x + " &y=" + y + " &z=" + z);
+            //} catch (IOException e) {
+            //    getLogger().info("Error sending coordinates to server!");
+            //}
         }
     }
 }

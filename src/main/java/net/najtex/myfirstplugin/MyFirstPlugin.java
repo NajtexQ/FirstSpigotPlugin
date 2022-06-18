@@ -1,7 +1,6 @@
 package net.najtex.myfirstplugin;
 
-import net.najtex.myfirstplugin.commands.Heal;
-import net.najtex.myfirstplugin.commands.HealthStats;
+import net.najtex.myfirstplugin.commands.*;
 import net.najtex.myfirstplugin.listeners.BlockBreakListener;
 import net.najtex.myfirstplugin.listeners.PlayerMove;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
@@ -56,6 +55,9 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         getCommand("heal").setExecutor(new Heal());
         getCommand("healthstats").setExecutor(new HealthStats());
+        getCommand("createworld").setExecutor(new CreateWorld());
+        getCommand("deleteworld").setExecutor(new DeleteWorld());
+        getCommand("worldtp").setExecutor(new WorldTeleport());
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, () ->
         {
