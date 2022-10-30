@@ -2,6 +2,7 @@ package net.najtex.myfirstplugin;
 
 import net.najtex.myfirstplugin.commands.*;
 import net.najtex.myfirstplugin.listeners.BlockBreakListener;
+import net.najtex.myfirstplugin.listeners.PlayerKilled;
 import net.najtex.myfirstplugin.listeners.PlayerMove;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -50,6 +51,7 @@ public final class MyFirstPlugin extends JavaPlugin {
         pluginManager.registerEvents(new SheepSpawnListener(), this);
         pluginManager.registerEvents(new BlockBreakListener(), this);
         pluginManager.registerEvents(new PlayerMove(), this);
+        pluginManager.registerEvents(new PlayerKilled(), this);
 
         getLogger().info("Listeners registered!");
 
