@@ -2,6 +2,7 @@ package net.najtex.myfirstplugin.minigame;
 
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerManager {
@@ -10,8 +11,9 @@ public class PlayerManager {
     private String playerName;
     private String playerUUID;
 
-    public static List<PlayerManager> playerManagerList;
+    public static List<PlayerManager> playerManagerList = new ArrayList<>();
 
+    public boolean isInGame;
     private int playerScore;
     private int playerKills;
     private int playerDeaths;

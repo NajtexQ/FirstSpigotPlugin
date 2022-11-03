@@ -17,6 +17,13 @@ public class TeamManager {
 
     private int teamScore;
 
+    public TeamManager(String teamName, String teamColor, int maxPlayers) {
+        this.teamName = teamName;
+        this.teamColor = teamColor;
+        this.maxPlayers = maxPlayers;
+        this.minPlayers = (int) Math.floor(maxPlayers * 0.75);
+    }
+
     public String getTeamName() {
         return teamName;
     }
@@ -52,4 +59,5 @@ public class TeamManager {
     public void addTeamScore(int score) {
         this.teamScore += score;
     }
+
 }
