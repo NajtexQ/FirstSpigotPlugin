@@ -112,12 +112,49 @@ public class ArenaManager {
                         arenaConfig.arenaLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".arenaLocation2"));
                         arenaConfig.schematicName = data.getString("arenas." + arenaSection + ".schematicName");
                         arenaConfig.arenaHeight = data.getInt("arenas." + arenaSection + ".arenaHeight");
+
+                        for (String baseId : data.getConfigurationSection("arenas." + arenaSection + ".bases").getKeys(false)) {
+
+                                getLogger().info("Creating base config for base: " + baseId);
+
+                                TeamColors baseColor = TeamColors.valueOf(data.getString("arenas." + arenaSection + ".bases." + baseId + ".color"));
+
+                                ArenaBase arenaBase = new ArenaBase(Integer.parseInt(baseId), baseColor);
+
+                                arenaBase.spawnLocation = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".spawnLocation"));
+                                arenaBase.respawnLocation = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".respawnLocation"));
+                                arenaBase.cageLocation1 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation1"));
+                                arenaBase.cageLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation2"));
+                                arenaBase.portalLocation1 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation1"));
+                                arenaBase.portalLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation2"));
+
+                                arenaConfig.arenaBases.put(baseColor, arenaBase);
+                        }
                 }
 
         }
 
         private Location stringToLocation(String locationString) {
                 String[] locationArray = locationString.split(",");
-                return new Location(Bukkit.getWorld(locationArray[0]), Double.parseDouble(locationArray[1]), Double.parseDouble(locationArray[2]), Double.parseDouble(locationArray[3]));
+                String worldName = locationArray[0].split("=")[1];
+                double x = Double.parseDouble(locationArray[1].split("=")[1]);
+                double y = Double.parseDouble(locationArray[2].split("=")[1]);
+                double z = Double.parseDouble(locationArray[3].split("=")[1]);
+                return new Location(Bukkit.getWorld(worldName), x, y, z);
+        }
+
+        public static String generateRandomString(int n)
+        {
+
+                String character = "abcdefghijklmnopqrstuvxyz";
+
+                StringBuilder sb = new StringBuilder(n);
+
+                for (int i = 0; i < n; i++) {
+                        int index = (int)(character.length() * Math.random());
+                        sb.append(character.charAt(index));
+                }
+
+                return sb.toString();
         }
 }

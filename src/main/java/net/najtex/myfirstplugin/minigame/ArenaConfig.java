@@ -17,13 +17,12 @@ public class ArenaConfig {
     public String schematicName;
     public int arenaHeight;
 
-    public List<ArenaBase> bases;
+    public HashMap<TeamColors, ArenaBase> arenaBases = new HashMap<>();
 
     public static HashMap<String, ArenaConfig> arenaConfigs = new HashMap<>();
 
     public ArenaConfig(String arenaName) {
         this.arenaName = arenaName;
-        bases = new ArrayList<>();
 
         arenaConfigs.put(arenaName, this);
     }

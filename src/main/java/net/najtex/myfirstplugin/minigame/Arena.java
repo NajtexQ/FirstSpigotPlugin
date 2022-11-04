@@ -7,8 +7,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.bukkit.Bukkit.getLogger;
 
 public class Arena {
 
@@ -22,9 +25,6 @@ public class Arena {
         private int numOfTeams;
         private int maxPlayersPerTeam;
 
-        private Location spawnLocation;
-        private Location lobbyLocation;
-
         private boolean isGameRunning;
 
         public Arena(int gameId, String gameName, int numOfTeams, int maxPlayersPerTeam) {
@@ -32,12 +32,13 @@ public class Arena {
                 this.arenaConfig = ArenaConfig.getArenaConfig(gameName);
 
                 this.gameId = gameId;
-                this.gameName = gameName;
                 this.numOfTeams = numOfTeams;
                 this.maxPlayersPerTeam = maxPlayersPerTeam;
 
-                this.spawnLocation = arenaConfig.endLocation;
-                this.lobbyLocation = arenaConfig.lobbyLocation;
+                String randomString = ArenaManager.generateRandomString(8);
+                this.gameName = arenaConfig.arenaName + "_" +  randomString;
+
+                getLogger().info("Arena name: " + this.gameName);
 
                 createTeams(maxPlayersPerTeam);
         }
@@ -48,7 +49,7 @@ public class Arena {
 
         public String getGameName() { return gameName; }
 
-        public Location getLobbyLocation() { return lobbyLocation; }
+        public Location getLobbyLocation() { return arenaConfig.lobbyLocation; }
 
         public boolean spaceAvailable() {
                 int playersInArena = 0;
@@ -79,7 +80,7 @@ public class Arena {
 
         public void Join(Player player) {
                 addPlayer(player);
-                player.teleport(lobbyLocation);
+                player.teleport(arenaConfig.lobbyLocation);
                 PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString()).isInGame = true;
 
                 player.sendTitle(ChatColor.BLUE + "Waiting for other players", "This is a test.", 1, 20, 1);
@@ -122,7 +123,7 @@ public class Arena {
                                 isGameRunning = true;
                                 for (TeamManager team : teams) {
                                         for (PlayerManager player : team.getPlayers()) {
-                                                player.getPlayer().teleport(spawnLocation);
+                                                player.getPlayer().teleport(arenaConfig.arenaLocation1);
                                                 player.getPlayer().sendTitle(ChatColor.BLUE + "Game started!", "This is a test.", 1, 20, 1);
                                         }
                                 }
