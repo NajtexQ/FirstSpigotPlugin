@@ -22,10 +22,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import static org.bukkit.Bukkit.*;
 
 public class WorldManager {
+
+    public static List<String> worldNames;
 
     public static World createWorld(String name) {
         getLogger().info("Creating world...");
@@ -44,6 +47,8 @@ public class WorldManager {
         newWorld.getBlockAt(blockLocation).setType(Material.BEDROCK);
 
         pasteSchematic(newWorld, blockLocation, "test");
+
+        worldNames.add(name);
 
         return newWorld;
     }
@@ -116,5 +121,11 @@ public class WorldManager {
 
         getLogger().info("Did we came here?");
 
+    }
+
+    public static void deleteAllWorlds() {
+        for (String worldName : worldNames) {
+            deleteWorld(worldName);
+        }
     }
 }

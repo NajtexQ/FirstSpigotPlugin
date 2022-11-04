@@ -6,6 +6,7 @@ import net.najtex.myfirstplugin.listeners.PlayerKilled;
 import net.najtex.myfirstplugin.listeners.PlayerMove;
 import net.najtex.myfirstplugin.listeners.SheepSpawnListener;
 import net.najtex.myfirstplugin.minigame.ArenaManager;
+import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -83,6 +84,8 @@ public final class MyFirstPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+
+        WorldManager.deleteAllWorlds();
 
         getLogger().info("MyFirstPlugin is now disabled!");
         //try {
