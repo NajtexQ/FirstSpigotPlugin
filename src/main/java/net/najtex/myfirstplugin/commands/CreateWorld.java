@@ -1,6 +1,7 @@
 package net.najtex.myfirstplugin.commands;
 
 import net.najtex.myfirstplugin.world.WorldManager;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,8 +18,10 @@ public class CreateWorld implements CommandExecutor {
             Player player = (Player) sender;
             player.sendMessage("Creating world...");
 
-            WorldManager.createWorld(worldName);
+            World world = WorldManager.createWorld(worldName);
             player.sendMessage("World created!");
+
+            player.teleport(world.getSpawnLocation());
         }
         return true;
     }

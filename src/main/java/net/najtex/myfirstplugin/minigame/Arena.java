@@ -107,13 +107,13 @@ public class Arena {
                                                 }
                                         }, 20 * (10 - i));
 
-                                        Bukkit.getScheduler().scheduleSyncDelayedTask(MyFirstPlugin.getPlugin(MyFirstPlugin.class), new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                        changeState(GameState.RUNNING);
-                                                }
-                                        }, 20*10);
                                 }
+                                Bukkit.getScheduler().scheduleSyncDelayedTask(MyFirstPlugin.getPlugin(MyFirstPlugin.class), new Runnable() {
+                                        @Override
+                                        public void run() {
+                                                changeState(GameState.RUNNING);
+                                        }
+                                }, 20*10);
                                 break;
                         case RUNNING:
                                 isGameRunning = true;
