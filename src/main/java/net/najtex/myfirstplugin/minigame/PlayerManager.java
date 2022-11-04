@@ -29,6 +29,8 @@ public class PlayerManager {
         return playerName;
     }
 
+    public Player getPlayer() { return player; }
+
     public String getPlayerUUID() {
         return playerUUID;
     }

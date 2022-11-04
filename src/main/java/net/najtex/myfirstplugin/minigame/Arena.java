@@ -1,6 +1,8 @@
 package net.najtex.myfirstplugin.minigame;
 
+import net.najtex.myfirstplugin.MyFirstPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,15 +25,16 @@ public class Arena {
 
         private boolean isGameRunning;
 
-        public Arena(int gameId, String gameName, int numOfTeams) {
+        public Arena(int gameId, String gameName, int numOfTeams, int maxPlayersPerTeam) {
                 this.gameId = gameId;
                 this.gameName = gameName;
                 this.numOfTeams = numOfTeams;
-                this.maxPlayersPerTeam = 2;
+                this.maxPlayersPerTeam = maxPlayersPerTeam;
 
                 World world = Bukkit.getWorld("world");
 
                 this.spawnLocation = new Location(world, 72, 76, 136);
+                this.lobbyLocation = new Location(world, 72, 76, 160);
 
                 createTeams(maxPlayersPerTeam);
         }
@@ -73,8 +76,66 @@ public class Arena {
 
         public void Join(Player player) {
                 addPlayer(player);
-                player.teleport(spawnLocation);
+                player.teleport(lobbyLocation);
                 PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString()).isInGame = true;
+
+                player.sendTitle(ChatColor.BLUE + "Waiting for other players", "This is a test.", 1, 20, 1);
+
+                sendMessageToAllPlayers(ChatColor.BLUE + player.getName() + " has joined the game.");
+
+                if (spaceAvailable()) {
+                        sendMessageToAllPlayers(ChatColor.BLUE + "Waiting for other players to join...");
+                } else {
+                        changeState(GameState.STARTING);
+                }
         }
 
+        public Arena changeState(GameState gameState) {
+                switch (gameState) {
+                        case LOBBY:
+                                isGameRunning = false;
+                                break;
+                        case STARTING:
+                                isGameRunning = true;
+
+                                for (int i = 10; i > 0; i--) {
+                                        final int time = i;
+                                        Bukkit.getScheduler().scheduleSyncDelayedTask(MyFirstPlugin.getPlugin(MyFirstPlugin.class), new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        sendMessageToAllPlayers(ChatColor.BLUE + "Game starting in " + time + " seconds.");
+                                                }
+                                        }, 20 * (10 - i));
+
+                                        Bukkit.getScheduler().scheduleSyncDelayedTask(MyFirstPlugin.getPlugin(MyFirstPlugin.class), new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        changeState(GameState.RUNNING);
+                                                }
+                                        }, 20*10);
+                                }
+                                break;
+                        case RUNNING:
+                                isGameRunning = true;
+                                for (TeamManager team : teams) {
+                                        for (PlayerManager player : team.getPlayers()) {
+                                                player.getPlayer().teleport(spawnLocation);
+                                                player.getPlayer().sendTitle(ChatColor.BLUE + "Game started!", "This is a test.", 1, 20, 1);
+                                        }
+                                }
+                                break;
+                        case END:
+                                isGameRunning = false;
+                                break;
+                }
+                return this;
+        }
+
+        public void sendMessageToAllPlayers(String message) {
+                for (TeamManager team : teams) {
+                        for (PlayerManager player : team.getPlayers()) {
+                                player.getPlayer().sendMessage(message);
+                        }
+                }
+        }
 }

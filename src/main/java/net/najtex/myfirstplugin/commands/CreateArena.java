@@ -18,31 +18,20 @@ public class CreateArena implements CommandExecutor {
         }
 
         // Check if the player has provided the correct number of arguments
-        if (args.length != 3) {
-            sender.sendMessage("Usage: /createarena <gameId> <gameName> <numOfTeams>");
+        if (args.length != 2) {
+            sender.sendMessage("Usage: /createarena <gameName> <numOfTeams>");
             return true;
         }
 
-        // Check if the gameId is a number
-        if (!isInteger(args[0])) {
-            sender.sendMessage("The gameId must be a number!");
-            return true;
-        }
 
         // Check if the numOfTeams is a number
-        if (!isInteger(args[2])) {
+        if (!isInteger(args[1])) {
             sender.sendMessage("The numOfTeams must be a number!");
             return true;
         }
 
-        // Check if the gameId is already in use
-        if (MyFirstPlugin.arenaManager.getArena(Integer.parseInt(args[0])) != null) {
-            sender.sendMessage("The gameId is already in use!");
-            return true;
-        }
-
         // Create the arena
-        MyFirstPlugin.arenaManager.createArena(Integer.parseInt(args[0]), args[1], Integer.parseInt(args[2]));
+        MyFirstPlugin.arenaManager.createArena(args[0], Integer.parseInt(args[1]), 1);
 
         sender.sendMessage("Arena created!");
 
