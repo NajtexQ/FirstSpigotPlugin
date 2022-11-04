@@ -40,6 +40,9 @@ public final class MyFirstPlugin extends JavaPlugin {
 
         arenaManager = new ArenaManager();
 
+        WorldManager.createSchematicsFolder();
+
+
         //try {
 //
         //    getLogger().info("Connecting to server...");

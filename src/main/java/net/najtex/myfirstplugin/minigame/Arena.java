@@ -15,6 +15,8 @@ public class Arena {
         private int gameId;
         private String gameName;
 
+        private ArenaConfig arenaConfig;
+
         private final Set<TeamManager> teams = new HashSet<>();
 
         private int numOfTeams;
@@ -26,15 +28,16 @@ public class Arena {
         private boolean isGameRunning;
 
         public Arena(int gameId, String gameName, int numOfTeams, int maxPlayersPerTeam) {
+
+                this.arenaConfig = ArenaConfig.getArenaConfig(gameName);
+
                 this.gameId = gameId;
                 this.gameName = gameName;
                 this.numOfTeams = numOfTeams;
                 this.maxPlayersPerTeam = maxPlayersPerTeam;
 
-                World world = Bukkit.getWorld("world");
-
-                this.spawnLocation = new Location(world, 72, 76, 136);
-                this.lobbyLocation = new Location(world, 72, 76, 160);
+                this.spawnLocation = arenaConfig.endLocation;
+                this.lobbyLocation = arenaConfig.lobbyLocation;
 
                 createTeams(maxPlayersPerTeam);
         }

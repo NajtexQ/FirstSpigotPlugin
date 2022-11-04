@@ -22,28 +22,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.bukkit.Bukkit.*;
 
 public class WorldManager {
 
-    public static List<String> worldNames;
+    public static List<String> worldNames = new ArrayList<>();
 
     public static World createWorld(String name) {
         getLogger().info("Creating world...");
         WorldCreator world = new WorldCreator(name);
 
         world.type(WorldType.FLAT);
+        world.environment(World.Environment.NORMAL);
         world.generateStructures(false);
 
         world.generatorSettings("{\"lakes\":false,\"features\":false,\"layers\":[{\"block\":\"minecraft:air\",\"height\":1}],\"structures\":{\"structures\":{}}}");
 
         World newWorld = world.createWorld();
 
-        Location blockLocation = new Location(newWorld, 0, 69, 0);
+        Location blockLocation = new Location(newWorld, 0, 65, 0);
 
-        newWorld.setSpawnLocation(0, 70, 0);
+        newWorld.setSpawnLocation(0, 66, 0);
         newWorld.getBlockAt(blockLocation).setType(Material.BEDROCK);
 
         pasteSchematic(newWorld, blockLocation, "test");
@@ -87,7 +89,7 @@ public class WorldManager {
 
     private static void pasteSchematic(World world, Location location, String schematic) {
 
-        File file = new File("plugins/FastAsyncWorldEdit/schematics/" + schematic + ".schematic");
+        File file = new File("plugins/MyFirstPlugin/schematics/" + schematic + ".schematic");
 
         ClipboardFormat format = ClipboardFormats.findByFile(file);
 
@@ -124,8 +126,20 @@ public class WorldManager {
     }
 
     public static void deleteAllWorlds() {
-        for (String worldName : worldNames) {
-            deleteWorld(worldName);
+
+        if (worldNames.size() > 0) {
+            for (String worldName : worldNames) {
+                deleteWorld(worldName);
+            }
+        }
+    }
+
+    public static void createSchematicsFolder() {
+
+        File folder = new File("plugins/MyFirstPlugin/schematics");
+
+        if (!folder.exists()) {
+            folder.mkdir();
         }
     }
 }

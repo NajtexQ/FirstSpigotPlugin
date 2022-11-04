@@ -1,0 +1,95 @@
+{
+  "arena_name": {
+    "lobbyLocation": 1,
+    "endLocation": 2,
+    "spectatorLocation": 3,
+    "arenaLocation1": 1,
+    "arenaLocation2": 2,
+    "schematic": "test.schematic",
+    "bases": {
+      "1": {
+        "spawnLocation": 1,
+        "respawnLocation": 5,
+        "cageLocation1": 1,
+        "cageLocation2": 2,
+        "portalLocation1": 1,
+        "portalLocation2": 2,
+        "color": "RED"
+      },
+      "2": {
+        "spawnLocation": 1,
+        "respawnLocation": 5,
+        "cageLocation1": 1,
+        "cageLocation2": 2,
+        "portalLocation1": 1,
+        "portalLocation2": 2,
+        "color": "BLUE"
+      },
+      "3": {
+        "spawnLocation": 1,
+        "respawnLocation": 5,
+        "cageLocation1": 1,
+        "cageLocation2": 2,
+        "portalLocation1": 1,
+        "portalLocation2": 2,
+        "color": "GREEN"
+      },
+      "4": {
+        "spawnLocation": 1,
+        "respawnLocation": 5,
+        "cageLocation1": 1,
+        "cageLocation2": 2,
+        "portalLocation1": 1,
+        "portalLocation2": 2,
+        "color": "YELLOW"
+      }
+    },
+    "height": 25
+  }
+}
+
+_________________________________________________________
+
+YAML
+
+arena_name:
+  lobbyLocation: 1
+  endLocation: 2
+  spectatorLocation: 3
+  arenaLocation1: 1
+  arenaLocation2: 2
+  schematic: test.schematic
+  bases:
+    '1':
+      spawnLocation: 1
+      respawnLocation: 5
+      cageLocation1: 1
+      cageLocation2: 2
+      portalLocation1: 1
+      portalLocation2: 2
+      color: RED
+    '2':
+      spawnLocation: 1
+      respawnLocation: 5
+      cageLocation1: 1
+      cageLocation2: 2
+      portalLocation1: 1
+      portalLocation2: 2
+      color: BLUE
+    '3':
+      spawnLocation: 1
+      respawnLocation: 5
+      cageLocation1: 1
+      cageLocation2: 2
+      portalLocation1: 1
+      portalLocation2: 2
+      color: GREEN
+    '4':
+      spawnLocation: 1
+      respawnLocation: 5
+      cageLocation1: 1
+      cageLocation2: 2
+      portalLocation1: 1
+      portalLocation2: 2
+      color: YELLOW
+  height: 25
