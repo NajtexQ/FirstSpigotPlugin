@@ -1,12 +1,27 @@
 package net.najtex.myfirstplugin.world;
 
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.EditSessionBuilder;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import org.bukkit.*;
+
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.bukkit.Bukkit.*;
 
@@ -23,8 +38,12 @@ public class WorldManager {
 
         World newWorld = world.createWorld();
 
+        Location blockLocation = new Location(newWorld, 0, 69, 0);
+
         newWorld.setSpawnLocation(0, 70, 0);
-        newWorld.getBlockAt(0, 69, 0).setType(Material.BEDROCK);
+        newWorld.getBlockAt(blockLocation).setType(Material.BEDROCK);
+
+        pasteSchematic(newWorld, blockLocation, "test");
 
         return newWorld;
     }
@@ -59,5 +78,43 @@ public class WorldManager {
             }
         }
         worldFolder.delete();
+    }
+
+    private static void pasteSchematic(World world, Location location, String schematic) {
+
+        File file = new File("plugins/FastAsyncWorldEdit/schematics/" + schematic + ".schematic");
+
+        ClipboardFormat format = ClipboardFormats.findByFile(file);
+
+        getLogger().info("Loading schematic...");
+
+        try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
+            Clipboard clipboard = reader.read();
+
+            getLogger().info("Schematic loaded!");
+
+            try (EditSession editSession = WorldEdit.getInstance().newEditSession(new BukkitWorld(world))) {
+                getLogger().info("Pasting schematic...");
+                Operation operation = new ClipboardHolder(clipboard)
+                        .createPaste(editSession)
+                        .to(BlockVector3.at(location.getX(), location.getY(), location.getZ()))
+                        .build();
+                getLogger().info("Schematic pasted!");
+                Operations.complete(operation);
+            } catch (WorldEditException e) {
+                getLogger().info("Error while pasting schematic!");
+                throw new RuntimeException(e);
+            }
+            getLogger().info("Test");
+        } catch (FileNotFoundException e) {
+            getLogger().info("Error while pasting schematic");
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            getLogger().info("Error while pasting schematic");
+            throw new RuntimeException(e);
+        }
+
+        getLogger().info("Did we came here?");
+
     }
 }
