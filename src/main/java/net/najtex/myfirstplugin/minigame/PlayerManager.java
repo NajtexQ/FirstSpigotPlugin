@@ -1,6 +1,8 @@
 package net.najtex.myfirstplugin.minigame;
 
+import net.najtex.myfirstplugin.sternalBoard.SternalBoardHandler;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +17,16 @@ public class PlayerManager {
 
     public TeamManager teamManager;
 
+    private Arena arena;
+
+    public SternalBoardHandler boardHandler;
+
     public boolean isInGame;
     private int playerScore;
     private int playerKills;
     private int playerDeaths;
 
-    public PlayerManager(Player player, TeamManager teamManager) {
+    public PlayerManager(Player player, TeamManager teamManager, Arena arena) {
         this.player = player;
         this.playerName = player.getName();
         this.playerUUID = player.getUniqueId().toString();
@@ -28,6 +34,11 @@ public class PlayerManager {
         this.playerKills = 0;
         this.playerDeaths = 0;
         this.playerScore = 0;
+        this.boardHandler = new SternalBoardHandler(player);
+        this.arena = arena;
+
+        arena.scoreBoards.add(boardHandler);
+
         playerManagerList.add(this);
     }
 

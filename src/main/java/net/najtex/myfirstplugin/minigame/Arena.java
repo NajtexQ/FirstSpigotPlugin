@@ -1,13 +1,17 @@
 package net.najtex.myfirstplugin.minigame;
 
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import net.najtex.myfirstplugin.MyFirstPlugin;
 import net.najtex.myfirstplugin.data.PlayerData;
+import net.najtex.myfirstplugin.sternalBoard.SternalBoardHandler;
 import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import scala.concurrent.impl.FutureConvertersImpl;
 
 import java.nio.charset.Charset;
@@ -25,6 +29,7 @@ public class Arena {
         private ArenaConfig arenaConfig;
 
         private final Set<TeamManager> teams = new HashSet<>();
+        public static final Set<SternalBoardHandler> scoreBoards = new HashSet<>();
 
         private int numOfTeams;
         private String gameMode;
@@ -43,6 +48,7 @@ public class Arena {
         public Arena(String arenaName, String gameMode, int numOfTeams, boolean isPrivate) {
 
                 this.arenaConfig = ArenaConfig.getArenaConfig(arenaName);
+                getLogger().info("Number of teams: " + numOfTeams);
                 this.numOfTeams = numOfTeams;
                 this.isPrivate = isPrivate;
 
@@ -84,6 +90,7 @@ public class Arena {
 
         public Location getLobbyLocation() { return lobbyLocation; }
 
+        public ArenaConfig getArenaConfig() { return this.arenaConfig; }
         public boolean spaceAvailable() {
                 int playersInArena = 0;
                 for (TeamManager team : teams) {
@@ -95,7 +102,12 @@ public class Arena {
         public void createTeams(int maxPlayersPerTeam) {
                 this.maxPlayersPerTeam = maxPlayersPerTeam;
                 for (int i = 0; i < numOfTeams; i++) {
-                        teams.add(new TeamManager(TeamColors.values()[i].name(), TeamColors.values()[i].name(), maxPlayersPerTeam));
+                        getLogger().info("Creating team " + i);
+                        teams.add(new TeamManager(this, TeamColors.values()[i].name(), TeamColors.values()[i].name(), maxPlayersPerTeam));
+                }
+
+                for (TeamManager team : teams) {
+                        getLogger().info("Team name: " + team.getTeamName());
                 }
         }
 
@@ -108,7 +120,7 @@ public class Arena {
                                 teamWithLeastPlayers = team;
                         }
                 }
-                teamWithLeastPlayers.addPlayer(new PlayerManager(player, teamWithLeastPlayers));
+                teamWithLeastPlayers.addPlayer(new PlayerManager(player, teamWithLeastPlayers, this));
         }
 
         public void Join(Player player) {
@@ -157,12 +169,14 @@ public class Arena {
                                 break;
                         case RUNNING:
                                 isGameRunning = true;
+                                setScoreBoards();
                                 for (TeamManager team : teams) {
                                         for (PlayerManager player : team.getPlayers()) {
                                                 player.getPlayer().teleport(arenaLocation1);
                                                 player.getPlayer().sendTitle(ChatColor.BLUE + "Game started!", "This is a test.", 1, 20, 1);
                                         }
                                 }
+                                startTimer();
                                 break;
                         case END:
                                 isGameRunning = false;
@@ -175,6 +189,17 @@ public class Arena {
                                                 WorldManager.deleteWorld(this.gameName);
                                         }
                                 }
+
+                                ArenaManager.removeArena(this);
+
+                                getLogger().info("Arena " + this.gameName + " has been removed.");
+
+                                for (SternalBoardHandler scoreBoard : scoreBoards) {
+                                        scoreBoard.delete();
+                                }
+
+                                getLogger().info("Scoreboards have been removed.");
+
                                 break;
                 }
                 return this;
@@ -206,5 +231,67 @@ public class Arena {
                                 this.maxPlayersPerTeam = 1;
                                 break;
                 }
+        }
+
+        private void setScoreBoards() {
+                for (TeamManager team : teams) {
+                        for (PlayerManager player : team.getPlayers()) {
+                                SternalBoardHandler scoreBoard = player.boardHandler;
+
+                                scoreBoard.updateTitle(ChatColor.GOLD + "TheBridge");
+
+                                TeamManager redTeam = getTeamByColor("RED");
+                                TeamManager blueTeam = getTeamByColor("BLUE");
+
+                                scoreBoard.updateLines(
+                                        " ",
+                                        ChatColor.WHITE + "Time: " + ChatColor.GRAY + "00:00",
+                                        " ",
+                                        redTeam != null ? ChatColor.RED + redTeam.getTeamName() + ": " + ChatColor.WHITE + redTeam.getTeamScore() : "",
+                                        blueTeam != null ? ChatColor.BLUE + blueTeam.getTeamName() + ": " + ChatColor.WHITE + blueTeam.getTeamScore() : "",
+                                        " ",
+                                        ChatColor.GRAY + "-----------",
+                                        " ",
+                                        ChatColor.WHITE + "Kills: " + ChatColor.GRAY + player.getPlayerKills(),
+                                        ChatColor.WHITE + "Deaths: " + ChatColor.GRAY + player.getPlayerDeaths(),
+                                        ChatColor.WHITE + "Score: " + ChatColor.GRAY + player.getPlayerScore(),
+                                        " ",
+                                        ChatColor.GRAY + "-----------"
+                                );
+                        }
+                }
+        }
+
+        private TeamManager getTeamByColor(String teamColor) {
+                for (TeamManager team : teams) {
+                        if (team.getTeamColor().equals(teamColor)) {
+                                return team;
+                        }
+                }
+                return null;
+        }
+
+        private void startTimer() {
+                new BukkitRunnable() {
+                        int time = 10;
+
+                        @Override
+                        public void run() {
+                                if (time <= 0) {
+                                        changeState(GameState.END);
+                                        cancel();
+                                } else {
+                                        for (TeamManager team : teams) {
+                                                for (PlayerManager player : team.getPlayers()) {
+                                                        SternalBoardHandler scoreBoard = player.boardHandler;
+                                                        scoreBoard.updateLine(1, ChatColor.WHITE + "Time: " + ChatColor.GRAY + String.format("%02d:%02d", time / 60, time % 60));
+                                                }
+                                        }
+                                        time--;
+                                        getLogger().info("Time: " + time);
+                                }
+                        }
+                }.runTaskTimer(MyFirstPlugin.getPlugin(MyFirstPlugin.class), 0, 20);
+
         }
 }

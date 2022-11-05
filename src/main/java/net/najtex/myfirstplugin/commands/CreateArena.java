@@ -24,7 +24,7 @@ public class CreateArena implements CommandExecutor {
         }
 
         // Create the arena
-        MyFirstPlugin.arenaManager.createArena(args[0], args[1], 1, false);
+        MyFirstPlugin.arenaManager.createArena(args[0], args[1], Integer.parseInt(args[2]), false);
 
         sender.sendMessage("Arena created!");
 

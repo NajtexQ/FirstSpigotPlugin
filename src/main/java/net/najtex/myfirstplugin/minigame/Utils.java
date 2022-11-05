@@ -1,5 +1,7 @@
 package net.najtex.myfirstplugin.minigame;
 
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,6 +27,18 @@ public class Utils {
         getLogger().info("World name: " + worldName);
         getLogger().info(new Location(world, x, y, z, yaw, pitch).toString());
         return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    public static CuboidRegion createCuboid(Location location1, Location location2) {
+
+        BlockVector3 min = BlockVector3.at(location1.getX(), location1.getY(), location1.getZ());
+        BlockVector3 max = BlockVector3.at(location2.getX(), location2.getY(), location2.getZ());
+
+        return new CuboidRegion(min, max);
+    }
+
+    public static boolean isLocationInRegion(Location location, CuboidRegion region) {
+        return region.contains(BlockVector3.at(location.getX(), location.getY(), location.getZ()));
     }
 
 }

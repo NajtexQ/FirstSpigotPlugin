@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.minigame;
 
+import net.najtex.myfirstplugin.sternalBoard.SternalBoardHandler;
 import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,7 +42,7 @@ public class ArenaManager {
                 return arena;
         }
 
-        public void removeArena(Arena arena) {
+        public static void removeArena(Arena arena) {
                 arenas.remove(arena);
         }
 
@@ -73,7 +74,7 @@ public class ArenaManager {
                 }
 
                 if (!foundArena) {
-                        Arena arena = createArena("sandtic", "solo", 1, false);
+                        Arena arena = createArena("sandtic", "solo", 2, false);
                         arena.Join(player);
                 }
         }

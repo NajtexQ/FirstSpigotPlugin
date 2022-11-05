@@ -1,11 +1,15 @@
 package net.najtex.myfirstplugin.listeners;
 
+import com.sk89q.worldedit.regions.CuboidRegion;
 import net.najtex.myfirstplugin.MyFirstPlugin;
 import net.najtex.myfirstplugin.SocketConnection;
+import net.najtex.myfirstplugin.minigame.PlayerManager;
+import net.najtex.myfirstplugin.minigame.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.graalvm.compiler.core.common.util.Util;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -20,22 +24,14 @@ public class PlayerMove implements Listener {
 
         Player player = event.getPlayer();
 
-        //player.sendMessage("You have moved!" + player.getName());
+        try {
+            PlayerManager playerManager = PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString());
 
-        if (player.getName().equals("Najtex")) {
-
-            // Get player coordinates
-            double x = event.getTo().getX();
-            double y = event.getTo().getY();
-            double z = event.getTo().getZ();
-
-            // Send coordinates to server
-            //try {
-            //    getLogger().info("Sending coordinates to server...");
-            //    MyFirstPlugin.socketConnection.sendMessage("x=" + x + " &y=" + y + " &z=" + z);
-            //} catch (IOException e) {
-            //    getLogger().info("Error sending coordinates to server!");
-            //}
+            if (Utils.isLocationInRegion(player.getLocation(), playerManager.teamManager.portalRegion)) {
+                getLogger().info("Player " + player.getName() + " entered portal");
+            }
+        } catch (NullPointerException e) {
+            // Player is not in game
         }
     }
 }

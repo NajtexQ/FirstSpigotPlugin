@@ -32,4 +32,8 @@ public class ArenaConfig {
     public static ArenaConfig getArenaConfig(String arenaName) {
         return arenaConfigs.get(arenaName);
     }
+
+    public ArenaBase getArenaBase(TeamColors teamColor) {
+        return arenaBases.get(teamColor);
+    }
 }
