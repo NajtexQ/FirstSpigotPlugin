@@ -1,12 +1,14 @@
 package net.najtex.myfirstplugin.minigame;
 
 import net.najtex.myfirstplugin.MyFirstPlugin;
+import net.najtex.myfirstplugin.data.PlayerData;
 import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import scala.concurrent.impl.FutureConvertersImpl;
 
 import java.nio.charset.Charset;
 import java.util.HashSet;
@@ -164,6 +166,15 @@ public class Arena {
                                 break;
                         case END:
                                 isGameRunning = false;
+                                for (TeamManager team : teams) {
+                                        for (PlayerManager player : team.getPlayers()) {
+                                                PlayerData playerData = new PlayerData(player.getPlayer());
+                                                playerData.updateNewStats(player.getPlayerKills(), player.getPlayerDeaths(), player.getPlayerScore(), true);
+                                                player.getPlayer().teleport(endLocation);
+                                                player.getPlayer().sendTitle(ChatColor.BLUE + "Game ended!", "This is a test.", 1, 20, 1);
+                                                WorldManager.deleteWorld(this.gameName);
+                                        }
+                                }
                                 break;
                 }
                 return this;

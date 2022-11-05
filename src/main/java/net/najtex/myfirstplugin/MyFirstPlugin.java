@@ -71,6 +71,7 @@ public final class MyFirstPlugin extends JavaPlugin {
         getCommand("worldtp").setExecutor(new WorldTeleport());
         getCommand("quickjoin").setExecutor(new QuickJoin());
         getCommand("createarena").setExecutor(new CreateArena());
+        getCommand("endgame").setExecutor(new EndGame());
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, () ->
         //{

@@ -18,7 +18,7 @@ import static org.bukkit.Bukkit.getLogger;
 public class ArenaManager {
 
         private static File arenaFile = new File("plugins/MyFirstPlugin/arena.yml");
-        private final Set<Arena> arenas = new HashSet<>();
+        private static final Set<Arena> arenas = new HashSet<>();
 
         private static FileConfiguration data;
 
@@ -139,5 +139,14 @@ public class ArenaManager {
                 }
 
                 return sb.toString();
+        }
+
+        public static Arena getArenaByName(String arenaName) {
+                for (Arena arena : arenas) {
+                        if (arena.getGameName().equals(arenaName)) {
+                                return arena;
+                        }
+                }
+                return null;
         }
 }

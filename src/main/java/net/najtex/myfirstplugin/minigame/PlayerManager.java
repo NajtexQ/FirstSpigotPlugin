@@ -25,6 +25,9 @@ public class PlayerManager {
         this.playerName = player.getName();
         this.playerUUID = player.getUniqueId().toString();
         this.teamManager = teamManager;
+        this.playerKills = 0;
+        this.playerDeaths = 0;
+        this.playerScore = 0;
         playerManagerList.add(this);
     }
 

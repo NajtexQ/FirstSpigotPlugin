@@ -55,4 +55,24 @@ public class PlayerData {
     public int getWins() {
         return data.getInt("wins");
     }
+
+    public void updateNewStats(int kills, int deaths, int scores, boolean win) {
+        setKills(kills);
+        setDeaths(deaths);
+        setScores(scores);
+        setPlayedGames(getPlayedGames() + 1);
+        if (win) {
+            setWins(getWins() + 1);
+        }
+
+        save();
+    }
+
+    void save() {
+        try {
+            data.save(config);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

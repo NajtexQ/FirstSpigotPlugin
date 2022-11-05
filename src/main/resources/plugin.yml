@@ -20,3 +20,5 @@ commands:
     description: Join a random server
   createarena:
     description: Create an arena
+  endgame:
+    description: End the game

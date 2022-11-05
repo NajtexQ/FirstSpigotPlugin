@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.listeners;
 
+import net.najtex.myfirstplugin.minigame.ArenaManager;
 import net.najtex.myfirstplugin.minigame.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,11 +14,16 @@ public class PlayerKilled implements Listener {
         Player player = event.getEntity();
         Player killer = player.getKiller();
 
-        PlayerKilledEvent(player, killer);
+        String worldName = event.getEntity().getWorld().getName();
 
-        player.sendMessage("You were killed by " + killer.getName());
+        if (ArenaManager.getArenaByName(worldName) != null) {
 
-        killer.sendMessage("You killed " + player.getName() + " with a K/D ratio of " + PlayerManager.getPlayerManagerByUUID(killer.getUniqueId().toString()).getPlayerKD());
+            PlayerKilledEvent(player, killer);
+
+            player.sendMessage("You were killed by " + killer.getName());
+
+            killer.sendMessage("You killed " + player.getName() + " with a K/D ratio of " + PlayerManager.getPlayerManagerByUUID(killer.getUniqueId().toString()).getPlayerKD());
+        }
     }
 
     private void PlayerKilledEvent(Player player, Player killer) {
