@@ -47,8 +47,10 @@ public class WorldManager {
 
         newWorld.setSpawnLocation(0, 66, 0);
         newWorld.getBlockAt(blockLocation).setType(Material.BEDROCK);
-
-        pasteSchematic(newWorld, blockLocation, "test");
+        newWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        newWorld.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        newWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        newWorld.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 
         worldNames.add(name);
 
@@ -87,9 +89,9 @@ public class WorldManager {
         worldFolder.delete();
     }
 
-    private static void pasteSchematic(World world, Location location, String schematic) {
+    public static void pasteSchematic(World world, Location location, String schematic) {
 
-        File file = new File("plugins/MyFirstPlugin/schematics/" + schematic + ".schematic");
+        File file = new File("plugins/MyFirstPlugin/schematics/" + schematic);
 
         ClipboardFormat format = ClipboardFormats.findByFile(file);
 

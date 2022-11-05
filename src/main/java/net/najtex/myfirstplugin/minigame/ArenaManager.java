@@ -26,15 +26,6 @@ public class ArenaManager {
                 createArenaFile();
                 data = YamlConfiguration.loadConfiguration(arenaFile);
 
-                Location lobbyLocation = new Location(Bukkit.getWorld("world"), 72, 76, 160);
-
-                data.set("arenas.sandtic.lobbyLocation", lobbyLocation.toString());
-                try {
-                        data.save(arenaFile);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-
                 try {
                         createArenaConfigs();
                 } catch (IOException e) {
@@ -46,8 +37,6 @@ public class ArenaManager {
 
                 Arena arena = new Arena(arenaName, gameMode, numOfTeams, isPrivate);
                 arenas.add(arena);
-
-                WorldManager.createWorld(arena.getGameName());
 
                 return arena;
         }
@@ -113,7 +102,7 @@ public class ArenaManager {
                         arenaConfig.spectatorLocation = data.getString("arenas." + arenaSection + ".spectatorLocation");
                         arenaConfig.arenaLocation1 = data.getString("arenas." + arenaSection + ".arenaLocation1");
                         arenaConfig.arenaLocation2 = data.getString("arenas." + arenaSection + ".arenaLocation2");
-                        arenaConfig.schematicName = data.getString("arenas." + arenaSection + ".schematicName");
+                        arenaConfig.schematicName = data.getString("arenas." + arenaSection + ".schematic");
                         arenaConfig.arenaHeight = data.getInt("arenas." + arenaSection + ".arenaHeight");
 
                         for (String baseId : data.getConfigurationSection("arenas." + arenaSection + ".bases").getKeys(false)) {

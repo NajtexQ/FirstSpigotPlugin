@@ -1,6 +1,7 @@
 package net.najtex.myfirstplugin.minigame;
 
 import net.najtex.myfirstplugin.MyFirstPlugin;
+import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -35,22 +36,31 @@ public class Arena {
         public Location arenaLocation1;
         public Location arenaLocation2;
 
+        public Location arenaPasteLocation;
+
         public Arena(String arenaName, String gameMode, int numOfTeams, boolean isPrivate) {
 
                 this.arenaConfig = ArenaConfig.getArenaConfig(arenaName);
                 this.numOfTeams = numOfTeams;
                 this.isPrivate = isPrivate;
 
-                this.lobbyLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.lobbyLocation);
-                this.endLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.endLocation);
-                this.spectatorLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.spectatorLocation);
-                this.arenaLocation1 = Utils.newWorldStringToLocation(arenaName, arenaConfig.arenaLocation1);
-                this.arenaLocation2 = Utils.newWorldStringToLocation(arenaName, arenaConfig.arenaLocation2);
+                String randomString = ArenaManager.generateRandomString(8);
+                this.gameName = arenaName + "_" +  randomString;
+
+                this.arenaPasteLocation = new Location(Bukkit.getWorld(this.gameName), 0, 65, 0);
+
+                getLogger().info("Schematic name: " + this.arenaConfig.schematicName);
+
+                World newWorld = WorldManager.createWorld(this.gameName);
+                WorldManager.pasteSchematic(newWorld, arenaPasteLocation, this.arenaConfig.schematicName);
+
+                this.lobbyLocation = Utils.newWorldStringToLocation(this.gameName, arenaConfig.lobbyLocation);
+                this.endLocation = Utils.newWorldStringToLocation(this.gameName, arenaConfig.endLocation);
+                this.spectatorLocation = Utils.newWorldStringToLocation(this.gameName, arenaConfig.spectatorLocation);
+                this.arenaLocation1 = Utils.newWorldStringToLocation(this.gameName, arenaConfig.arenaLocation1);
+                this.arenaLocation2 = Utils.newWorldStringToLocation(this.gameName, arenaConfig.arenaLocation2);
 
                 setGameMode(gameMode);
-
-                String randomString = ArenaManager.generateRandomString(8);
-                this.gameName = arenaConfig.arenaName + "_" +  randomString;
 
                 getLogger().info("Arena name: " + this.gameName);
 
@@ -102,6 +112,8 @@ public class Arena {
         public void Join(Player player) {
                 addPlayer(player);
 
+                getLogger().info("Player " + player.getName() + " joined arena " + this.gameName);
+                getLogger().info("Teleporting to: " + this.lobbyLocation.toString());
                 player.teleport(lobbyLocation);
                 PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString()).isInGame = true;
 
