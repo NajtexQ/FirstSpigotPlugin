@@ -29,11 +29,23 @@ public class Arena {
 
         private boolean isGameRunning;
 
+        public Location lobbyLocation;
+        public Location endLocation;
+        public Location spectatorLocation;
+        public Location arenaLocation1;
+        public Location arenaLocation2;
+
         public Arena(String arenaName, String gameMode, int numOfTeams, boolean isPrivate) {
 
                 this.arenaConfig = ArenaConfig.getArenaConfig(arenaName);
                 this.numOfTeams = numOfTeams;
                 this.isPrivate = isPrivate;
+
+                this.lobbyLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.lobbyLocation);
+                this.endLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.endLocation);
+                this.spectatorLocation = Utils.newWorldStringToLocation(arenaName, arenaConfig.spectatorLocation);
+                this.arenaLocation1 = Utils.newWorldStringToLocation(arenaName, arenaConfig.arenaLocation1);
+                this.arenaLocation2 = Utils.newWorldStringToLocation(arenaName, arenaConfig.arenaLocation2);
 
                 setGameMode(gameMode);
 
@@ -58,7 +70,7 @@ public class Arena {
         public boolean getIsRunning() { return this.isGameRunning; }
         public boolean getIsPrivate() { return this.isPrivate; }
 
-        public Location getLobbyLocation() { return arenaConfig.lobbyLocation; }
+        public Location getLobbyLocation() { return lobbyLocation; }
 
         public boolean spaceAvailable() {
                 int playersInArena = 0;
@@ -90,7 +102,7 @@ public class Arena {
         public void Join(Player player) {
                 addPlayer(player);
 
-                player.teleport(arenaConfig.lobbyLocation);
+                player.teleport(lobbyLocation);
                 PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString()).isInGame = true;
 
                 player.sendTitle(ChatColor.BLUE + "Waiting for other players", "This is a test.", 1, 20, 1);
@@ -133,7 +145,7 @@ public class Arena {
                                 isGameRunning = true;
                                 for (TeamManager team : teams) {
                                         for (PlayerManager player : team.getPlayers()) {
-                                                player.getPlayer().teleport(arenaConfig.arenaLocation1);
+                                                player.getPlayer().teleport(arenaLocation1);
                                                 player.getPlayer().sendTitle(ChatColor.BLUE + "Game started!", "This is a test.", 1, 20, 1);
                                         }
                                 }

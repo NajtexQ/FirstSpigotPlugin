@@ -108,11 +108,11 @@ public class ArenaManager {
 
                         ArenaConfig arenaConfig = new ArenaConfig(arenaSection);
 
-                        arenaConfig.lobbyLocation = stringToLocation(data.getString("arenas." + arenaSection + ".lobbyLocation"));
-                        arenaConfig.endLocation = stringToLocation(data.getString("arenas." + arenaSection + ".endLocation"));
-                        arenaConfig.spectatorLocation = stringToLocation(data.getString("arenas." + arenaSection + ".spectatorLocation"));
-                        arenaConfig.arenaLocation1 = stringToLocation(data.getString("arenas." + arenaSection + ".arenaLocation1"));
-                        arenaConfig.arenaLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".arenaLocation2"));
+                        arenaConfig.lobbyLocation = data.getString("arenas." + arenaSection + ".lobbyLocation");
+                        arenaConfig.endLocation = data.getString("arenas." + arenaSection + ".endLocation");
+                        arenaConfig.spectatorLocation = data.getString("arenas." + arenaSection + ".spectatorLocation");
+                        arenaConfig.arenaLocation1 = data.getString("arenas." + arenaSection + ".arenaLocation1");
+                        arenaConfig.arenaLocation2 = data.getString("arenas." + arenaSection + ".arenaLocation2");
                         arenaConfig.schematicName = data.getString("arenas." + arenaSection + ".schematicName");
                         arenaConfig.arenaHeight = data.getInt("arenas." + arenaSection + ".arenaHeight");
 
@@ -124,26 +124,17 @@ public class ArenaManager {
 
                                 ArenaBase arenaBase = new ArenaBase(Integer.parseInt(baseId), baseColor);
 
-                                arenaBase.spawnLocation = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".spawnLocation"));
-                                arenaBase.respawnLocation = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".respawnLocation"));
-                                arenaBase.cageLocation1 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation1"));
-                                arenaBase.cageLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation2"));
-                                arenaBase.portalLocation1 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation1"));
-                                arenaBase.portalLocation2 = stringToLocation(data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation2"));
+                                arenaBase.spawnLocation = data.getString("arenas." + arenaSection + ".bases." + baseId + ".spawnLocation");
+                                arenaBase.respawnLocation = data.getString("arenas." + arenaSection + ".bases." + baseId + ".respawnLocation");
+                                arenaBase.cageLocation1 = data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation1");
+                                arenaBase.cageLocation2 = data.getString("arenas." + arenaSection + ".bases." + baseId + ".cageLocation2");
+                                arenaBase.portalLocation1 = data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation1");
+                                arenaBase.portalLocation2 = data.getString("arenas." + arenaSection + ".bases." + baseId + ".portalLocation2");
 
                                 arenaConfig.arenaBases.put(baseColor, arenaBase);
                         }
                 }
 
-        }
-
-        private Location stringToLocation(String locationString) {
-                String[] locationArray = locationString.split(",");
-                String worldName = locationArray[0].split("=")[2].split("}")[0];
-                double x = Double.parseDouble(locationArray[1].split("=")[1]);
-                double y = Double.parseDouble(locationArray[2].split("=")[1]);
-                double z = Double.parseDouble(locationArray[3].split("=")[1]);
-                return new Location(Bukkit.getWorld(worldName), x, y, z);
         }
 
         public static String generateRandomString(int n)

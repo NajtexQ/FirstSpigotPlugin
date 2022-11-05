@@ -6,12 +6,12 @@ public class ArenaBase {
 
     public int baseId;
     public TeamColors teamColor;
-    public Location spawnLocation;
-    public Location respawnLocation;
-    public Location cageLocation1;
-    public Location cageLocation2;
-    public Location portalLocation1;
-    public Location portalLocation2;
+    public String spawnLocation;
+    public String respawnLocation;
+    public String cageLocation1;
+    public String cageLocation2;
+    public String portalLocation1;
+    public String portalLocation2;
 
     public ArenaBase(int baseId, TeamColors teamColor) {
         this.baseId = baseId;

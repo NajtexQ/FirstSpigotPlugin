@@ -9,13 +9,15 @@ import java.util.List;
 
 public class ArenaConfig {
     public String arenaName;
-    public Location lobbyLocation;
-    public Location endLocation;
-    public Location spectatorLocation;
-    public Location arenaLocation1;
-    public Location arenaLocation2;
+    public String lobbyLocation;
+    public String endLocation;
+    public String spectatorLocation;
+    public String arenaLocation1;
+    public String arenaLocation2;
     public String schematicName;
     public int arenaHeight;
+
+    public boolean isDone;
 
     public HashMap<TeamColors, ArenaBase> arenaBases = new HashMap<>();
 
