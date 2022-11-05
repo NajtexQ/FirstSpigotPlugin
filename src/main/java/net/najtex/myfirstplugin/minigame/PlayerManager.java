@@ -13,15 +13,18 @@ public class PlayerManager {
 
     public static List<PlayerManager> playerManagerList = new ArrayList<>();
 
+    public TeamManager teamManager;
+
     public boolean isInGame;
     private int playerScore;
     private int playerKills;
     private int playerDeaths;
 
-    public PlayerManager(Player player) {
+    public PlayerManager(Player player, TeamManager teamManager) {
         this.player = player;
         this.playerName = player.getName();
         this.playerUUID = player.getUniqueId().toString();
+        this.teamManager = teamManager;
         playerManagerList.add(this);
     }
 
@@ -56,6 +59,10 @@ public class PlayerManager {
         this.playerKills += kills;
     }
     public void addPlayerDeaths(int deaths) { this.playerDeaths += deaths; }
+
+    public void setTeamManager(TeamManager teamManager) {
+        this.teamManager = teamManager;
+    }
 
     public void incrementPlayerKills() { this.playerKills++; }
     public void incrementPlayerDeaths() { this.playerDeaths++; }

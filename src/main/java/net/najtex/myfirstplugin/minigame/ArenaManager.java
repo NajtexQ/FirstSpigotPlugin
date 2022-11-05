@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.minigame;
 
+import net.najtex.myfirstplugin.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,8 +16,6 @@ import java.util.Set;
 import static org.bukkit.Bukkit.getLogger;
 
 public class ArenaManager {
-
-        private int gameId = 0;
 
         private static File arenaFile = new File("plugins/MyFirstPlugin/arena.yml");
         private final Set<Arena> arenas = new HashSet<>();
@@ -43,10 +42,12 @@ public class ArenaManager {
                 }
         }
 
-        public Arena createArena(String gameName, int numOfTeams, int maxPlayersPerTeam) {
-                Arena arena = new Arena(gameId, gameName, numOfTeams, maxPlayersPerTeam);
+        public Arena createArena(String arenaName, String gameMode, int numOfTeams, boolean isPrivate) {
+
+                Arena arena = new Arena(arenaName, gameMode, numOfTeams, isPrivate);
                 arenas.add(arena);
-                gameId++;
+
+                WorldManager.createWorld(arena.getGameName());
 
                 return arena;
         }
@@ -68,20 +69,22 @@ public class ArenaManager {
                 return arenas;
         }
 
-        public void QuickJoin(Player player, String gameName) {
+        public void QuickJoin(Player player, String gameMode) {
 
                 boolean foundArena = false;
 
                 for (Arena arena : arenas) {
-                        if (arena.spaceAvailable()) {
-                                arena.Join(player);
-                                foundArena = true;
-                                break;
+                        if (arena.getGameMode().equals(gameMode)) {
+                                if (arena.spaceAvailable()) {
+                                        arena.Join(player);
+                                        foundArena = true;
+                                        break;
+                                }
                         }
                 }
 
                 if (!foundArena) {
-                        Arena arena = createArena(gameName, 2, 1);
+                        Arena arena = createArena("sandtic", "solo", 1, false);
                         arena.Join(player);
                 }
         }
@@ -136,7 +139,7 @@ public class ArenaManager {
 
         private Location stringToLocation(String locationString) {
                 String[] locationArray = locationString.split(",");
-                String worldName = locationArray[0].split("=")[1];
+                String worldName = locationArray[0].split("=")[2].split("}")[0];
                 double x = Double.parseDouble(locationArray[1].split("=")[1]);
                 double y = Double.parseDouble(locationArray[2].split("=")[1]);
                 double z = Double.parseDouble(locationArray[3].split("=")[1]);

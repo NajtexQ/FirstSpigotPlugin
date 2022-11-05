@@ -14,26 +14,28 @@ import java.util.Set;
 import static org.bukkit.Bukkit.getLogger;
 
 public class Arena {
-
-        private int gameId;
+        private static int gameId = 0;
         private String gameName;
+
+        private boolean isPrivate;
 
         private ArenaConfig arenaConfig;
 
         private final Set<TeamManager> teams = new HashSet<>();
 
         private int numOfTeams;
+        private String gameMode;
         private int maxPlayersPerTeam;
 
         private boolean isGameRunning;
 
-        public Arena(int gameId, String gameName, int numOfTeams, int maxPlayersPerTeam) {
+        public Arena(String arenaName, String gameMode, int numOfTeams, boolean isPrivate) {
 
-                this.arenaConfig = ArenaConfig.getArenaConfig(gameName);
-
-                this.gameId = gameId;
+                this.arenaConfig = ArenaConfig.getArenaConfig(arenaName);
                 this.numOfTeams = numOfTeams;
-                this.maxPlayersPerTeam = maxPlayersPerTeam;
+                this.isPrivate = isPrivate;
+
+                setGameMode(gameMode);
 
                 String randomString = ArenaManager.generateRandomString(8);
                 this.gameName = arenaConfig.arenaName + "_" +  randomString;
@@ -41,6 +43,8 @@ public class Arena {
                 getLogger().info("Arena name: " + this.gameName);
 
                 createTeams(maxPlayersPerTeam);
+
+                gameId++;
         }
 
         public int getGameId() {
@@ -48,6 +52,11 @@ public class Arena {
         }
 
         public String getGameName() { return gameName; }
+
+        public String getGameMode() { return this.gameMode; }
+
+        public boolean getIsRunning() { return this.isGameRunning; }
+        public boolean getIsPrivate() { return this.isPrivate; }
 
         public Location getLobbyLocation() { return arenaConfig.lobbyLocation; }
 
@@ -75,11 +84,12 @@ public class Arena {
                                 teamWithLeastPlayers = team;
                         }
                 }
-                teamWithLeastPlayers.addPlayer(new PlayerManager(player));
+                teamWithLeastPlayers.addPlayer(new PlayerManager(player, teamWithLeastPlayers));
         }
 
         public void Join(Player player) {
                 addPlayer(player);
+
                 player.teleport(arenaConfig.lobbyLocation);
                 PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString()).isInGame = true;
 
@@ -140,6 +150,26 @@ public class Arena {
                         for (PlayerManager player : team.getPlayers()) {
                                 player.getPlayer().sendMessage(message);
                         }
+                }
+        }
+
+        private void setGameMode(String gameMode) {
+
+                this.gameMode = gameMode;
+
+                switch (gameMode) {
+                        case "solo":
+                                this.maxPlayersPerTeam = 1;
+                                break;
+                        case "duo":
+                                this.maxPlayersPerTeam = 2;
+                                break;
+                        case "squad":
+                                this.maxPlayersPerTeam = 4;
+                                break;
+                        default:
+                                this.maxPlayersPerTeam = 1;
+                                break;
                 }
         }
 }

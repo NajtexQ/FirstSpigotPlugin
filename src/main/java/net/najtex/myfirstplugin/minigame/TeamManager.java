@@ -15,6 +15,8 @@ public class TeamManager {
     private int minPlayers;
     private int maxPlayers;
 
+    public ArenaBase arenaBase;
+
     private int teamScore;
 
     public TeamManager(String teamName, String teamColor, int maxPlayers) {
@@ -58,6 +60,10 @@ public class TeamManager {
 
     public void addTeamScore(int score) {
         this.teamScore += score;
+    }
+
+    public void setArenaBase(ArenaBase arenaBase) {
+        this.arenaBase = arenaBase;
     }
 
 }
