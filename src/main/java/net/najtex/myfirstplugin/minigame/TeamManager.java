@@ -12,7 +12,7 @@ public class TeamManager {
     private String teamName;
     private String teamColor;
 
-    private Arena arena;
+    public Arena arena;
 
     private final Set<PlayerManager> players = new HashSet<>();
 
@@ -53,6 +53,8 @@ public class TeamManager {
 
         this.cageRegion = Utils.createCuboid(cageLocation1, cageLocation2);
         this.portalRegion = Utils.createCuboid(portalLocation1, portalLocation2);
+
+        this.arena.portalRegions.put(TeamColors.valueOf(this.teamColor), portalRegion);
     }
 
     public String getTeamName() {
@@ -87,8 +89,9 @@ public class TeamManager {
         this.players.remove(player);
     }
 
-    public void addTeamScore(int score) {
-        this.teamScore += score;
+    public void addTeamScore(PlayerManager player) {
+        this.teamScore += 1;
+        player.addPlayerScore(1);
     }
 
     public void setArenaBase(ArenaBase arenaBase) {

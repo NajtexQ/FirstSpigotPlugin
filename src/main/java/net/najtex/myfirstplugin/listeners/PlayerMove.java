@@ -1,5 +1,6 @@
 package net.najtex.myfirstplugin.listeners;
 
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import net.najtex.myfirstplugin.MyFirstPlugin;
 import net.najtex.myfirstplugin.SocketConnection;
@@ -27,11 +28,18 @@ public class PlayerMove implements Listener {
         try {
             PlayerManager playerManager = PlayerManager.getPlayerManagerByUUID(player.getUniqueId().toString());
 
-            if (Utils.isLocationInRegion(player.getLocation(), playerManager.teamManager.portalRegion)) {
-                getLogger().info("Player " + player.getName() + " entered portal");
+            for (CuboidRegion portalRegion : playerManager.teamManager.arena.portalRegions.values()) {
+                if (playerManager.teamManager.getTeamColor() != portalRegion.toString()) {
+                    BlockVector3 playerLocation = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+                    if (portalRegion.contains(playerLocation)) {
+                        player.sendMessage("You entered a portalRegion");
+                        playerManager.teamManager.arena.scoredGoal();
+                        playerManager.teamManager.addTeamScore(playerManager);
+                        playerManager.teamManager.arena.updateScoreBoardPoints();
+                    }
+                }
             }
         } catch (NullPointerException e) {
-            // Player is not in game
         }
     }
 }

@@ -13,8 +13,10 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import scala.concurrent.impl.FutureConvertersImpl;
+import sun.util.resources.cldr.ext.CurrencyNames_vai;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +32,8 @@ public class Arena {
 
         private final Set<TeamManager> teams = new HashSet<>();
         public static final Set<SternalBoardHandler> scoreBoards = new HashSet<>();
+
+        public final HashMap<TeamColors, CuboidRegion> portalRegions = new HashMap<>();
 
         private int numOfTeams;
         private String gameMode;
@@ -262,6 +266,13 @@ public class Arena {
                 }
         }
 
+        public void updateScoreBoardPoints() {
+                for (SternalBoardHandler scoreBoard : scoreBoards) {
+                        scoreBoard.updateLine(3, ChatColor.RED + getTeamByColor("RED").getTeamName() + ": " + ChatColor.WHITE + getTeamByColor("RED").getTeamScore());
+                        scoreBoard.updateLine(4, ChatColor.BLUE + getTeamByColor("BLUE").getTeamName() + ": " + ChatColor.WHITE + getTeamByColor("BLUE").getTeamScore());
+                }
+        }
+
         private TeamManager getTeamByColor(String teamColor) {
                 for (TeamManager team : teams) {
                         if (team.getTeamColor().equals(teamColor)) {
@@ -293,5 +304,14 @@ public class Arena {
                         }
                 }.runTaskTimer(MyFirstPlugin.getPlugin(MyFirstPlugin.class), 0, 20);
 
+        }
+
+        public void scoredGoal() {
+                for (TeamManager team : teams) {
+                        for (PlayerManager player : team.getPlayers()) {
+                                player.getPlayer().teleport(player.teamManager.respawnLocation);
+                                player.getPlayer().sendTitle(ChatColor.BLUE + "Goal scored!", "This is a test.", 1, 20, 1);
+                        }
+                }
         }
 }
